@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b6b45">
+<title>Emergency Response Hub</title>
+<style>
+*{box-sizing:border-box}
+:root{
+ --green:#087443;--green2:#0da15e;--light:#f4f8f6;--card:#fff;--ink:#16231d;
+ --muted:#66756d;--line:#e0e8e3;--red:#dc2f45;--orange:#e87918;--blue:#2574d9;
+ --shadow:0 10px 30px rgba(17,52,36,.08)
+}
+body{margin:0;background:var(--light);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,input,textarea{font:inherit}button{cursor:pointer}
+.topbar{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:11px;font-weight:900;font-size:20px;color:var(--green)}
+.brand-mark{width:40px;height:40px;border-radius:12px;background:var(--green);color:#fff;display:grid;place-items:center;font-size:21px}
+.nav{display:flex;gap:8px}.nav button{border:0;background:transparent;padding:10px 13px;color:#55635c;font-weight:700;border-radius:9px}.nav button:hover,.nav button.active{background:#edf7f1;color:var(--green)}
+.container{max-width:1180px;margin:auto;padding:28px 22px 60px}
+.hero{background:linear-gradient(120deg,#075d37,#10a55e);border-radius:25px;color:#fff;padding:35px;display:grid;grid-template-columns:1.4fr .8fr;gap:25px;overflow:hidden;position:relative}
+.hero h1{font-size:clamp(34px,5vw,55px);line-height:1.02;margin:10px 0 14px}.hero p{max-width:610px;line-height:1.65;color:#e1f4e9}
+.status{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.13);padding:8px 12px;border-radius:999px;font-size:13px;font-weight:800}.dot{width:8px;height:8px;background:#65e58e;border-radius:50%}
+.sos-wrap{display:grid;place-items:center;min-height:250px}.sos{width:190px;height:190px;border-radius:50%;border:12px solid rgba(255,255,255,.25);background:var(--red);color:#fff;font-size:30px;font-weight:1000;box-shadow:0 0 0 20px rgba(255,255,255,.06);transition:.2s}.sos:hover{transform:scale(1.04)}.sos small{display:block;font-size:12px;letter-spacing:1px;margin-top:5px}
+.notice{margin:20px 0;background:#fff7e8;border:1px solid #f2d39b;border-radius:14px;padding:13px 16px;color:#805514;font-size:13px}
+.section{margin-top:32px}.section-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:15px}.section h2{margin:0;font-size:25px}.section-head span{font-size:13px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.service{background:#fff;border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:0 3px 13px rgba(17,52,36,.035);transition:.18s}.service:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.sicon{width:48px;height:48px;border-radius:13px;background:#edf7f1;display:grid;place-items:center;font-size:24px;margin-bottom:14px}.service h3{font-size:17px;margin:0 0 5px}.service p{font-size:12px;color:var(--muted);line-height:1.5;margin:0 0 15px}.call{width:100%;border:0;background:#e9f6ef;color:var(--green);padding:10px;border-radius:9px;font-weight:850}.call:hover{background:#d7efdf}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 3px 13px rgba(17,52,36,.035)}
+.location{display:flex;gap:14px;align-items:center}.location-icon{font-size:34px}.location strong{display:block}.location span{color:var(--muted);font-size:13px}.outline{margin-top:17px;width:100%;background:#fff;border:1px solid var(--line);padding:11px;border-radius:10px;font-weight:750}
+.contact{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}.contact:last-child{border:0}.person{display:flex;align-items:center;gap:10px}.avatar{width:38px;height:38px;border-radius:50%;background:#e7f4ed;display:grid;place-items:center;font-weight:900;color:var(--green)}.mini-call{border:0;border-radius:9px;background:#eef6ff;color:var(--blue);padding:8px 11px;font-weight:800}
+.activity{padding:13px 0;border-bottom:1px solid var(--line);display:flex;gap:12px}.activity:last-child{border:0}.a-dot{width:10px;height:10px;background:var(--green2);border-radius:50%;margin-top:5px}.activity p{margin:0;font-size:13px}.activity span{color:var(--muted);font-size:11px}
+footer{background:#11231b;color:#b9c9c1;text-align:center;padding:28px;font-size:12px;margin-top:30px}
+.modal{display:none;position:fixed;inset:0;background:rgba(8,25,17,.6);z-index:50;place-items:center;padding:20px}.modal.show{display:grid}.modalbox{width:min(480px,100%);background:#fff;border-radius:20px;padding:25px;position:relative}.close{position:absolute;right:15px;top:12px;border:0;background:none;font-size:26px}.modalbox h2{margin-top:0}.modalbox input,.modalbox textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;margin:6px 0 12px}.primary{border:0;background:var(--green);color:#fff;padding:11px 15px;border-radius:9px;font-weight:800}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(80px);background:#14241c;color:#fff;padding:13px 18px;border-radius:10px;opacity:0;transition:.3s;z-index:80;font-size:13px}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:850px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}.nav button:nth-child(2),.nav button:nth-child(3){display:none}}
+@media(max-width:550px){.grid{grid-template-columns:1fr 1fr}.topbar{padding:0 15px}.brand span{display:none}.hero{padding:25px}.sos{width:155px;height:155px}.container{padding:18px 14px 45px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="brand-mark">✚</div><span>Emergency Response Hub</span></div>
+  <div class="nav">
+    <button class="active" onclick="scrollToId('home')">Home</button>
+    <button onclick="scrollToId('services')">Services</button>
+    <button onclick="scrollToId('contacts')">Contacts</button><button onclick="openSheTeam()">SHE Team</button><button onclick="openReport()">Report</button><button onclick="openBot()">🤖 Bot</button>
+    <button onclick="openModal('settings')">⚙️</button>
+  </div>
+</header>
+
+<main class="container" id="home">
+<section class="hero">
+  <div>
+    <span class="status"><span class="dot"></span> Emergency support dashboard</span>
+    <h1>Help is closer when every second matters.</h1>
+    <p>Quickly access emergency services, share your location, alert trusted contacts and keep important safety information in one place.</p>
+    <button class="outline" style="width:auto;background:#fff;color:var(--green);border:0;padding:12px 17px" onclick="locate()">📍 Detect my location</button>
+  </div>
+  <div class="sos-wrap">
+    <button class="sos" onclick="triggerSOS()">SOS<small>GET HELP</small></button>
+  </div>
+</section>
+
+<div class="notice">⚠️ <b>Prototype:</b> This demo simulates emergency actions. It does not automatically contact emergency services until connected to real phone, SMS, map or backend services.</div>
+
+<section class="section" id="services">
+ <div class="section-head"><h2>Emergency services</h2><span>Tap to call</span></div>
+ <div class="grid">
+  <article class="service"><div class="sicon">🚑</div><h3>Ambulance</h3><p>Medical emergency and ambulance assistance.</p><button class="call" onclick="callService('Ambulance','108')">Call 108</button></article>
+  <article class="service"><div class="sicon">🚓</div><h3>Police</h3><p>Police assistance for urgent safety situations.</p><button class="call" onclick="callService('Police','112')">Call 112</button></article>
+  <article class="service"><div class="sicon">🚒</div><h3>Fire & Rescue</h3><p>Fire, rescue and disaster response support.</p><button class="call" onclick="callService('Fire & Rescue','101')">Call 101</button></article>
+  <article class="service"><div class="sicon">🏥</div><h3>Hospital</h3><p>Open nearby medical facilities on your map.</p><button class="call" onclick="findHospitals()">Find nearby</button></article>
+ </div>
+</section>
+
+<section class="section two" id="contacts">
+ <div class="panel">
+  <div class="section-head"><h2>My location</h2></div>
+  <div class="location"><div class="location-icon">📍</div><div><strong id="locationText">Location not detected</strong><span id="coords">Tap detect location to begin</span></div></div>
+  <button class="outline" onclick="locate()">Update location</button>
+  <button class="outline" onclick="shareLocation()">Share location</button>
+ </div>
+ <div class="panel">
+  <div class="section-head"><h2>Trusted contacts</h2><button class="primary" onclick="openModal('contact')">+ Add</button></div>
+  <div id="contactList">
+   <div class="contact"><div class="person"><div class="avatar">M</div><div><strong>Mom</strong><br><small style="color:#6b776f">Trusted contact</small></div></div><button class="mini-call" onclick="toast('Calling Mom…')">Call</button></div>
+   <div class="contact"><div class="person"><div class="avatar">F</div><div><strong>Family</strong><br><small style="color:#6b776f">Emergency contact</small></div></div><button class="mini-call" onclick="toast('Calling Family…')">Call</button></div>
+  </div>
+ </div>
+</section>
+
+<section class="section panel">
+ <div class="section-head"><h2>Recent activity</h2><span id="activityCount">0 actions</span></div>
+ <div id="activity"><div class="activity"><div class="a-dot"></div><div><p>Emergency Hub opened</p><span>Just now</span></div></div></div>
+</section>
+
+<section class="section two" id="extraTools">
+  <div class="panel">
+    <div class="section-head"><h2>👩‍✈️ SHE Team</h2><span>Women safety</span></div>
+    <p style="color:#65736c;line-height:1.6">Quickly access women-safety support and prepare an incident report.</p>
+    <button class="call" onclick="openSheTeam()">Contact SHE Team</button>
+  </div>
+  <div class="panel">
+    <div class="section-head"><h2>📝 Report an Issue</h2><span>24/7 reporting</span></div>
+    <p style="color:#65736c;line-height:1.6">Report a safety concern, suspicious activity, harassment or other emergency-related issue.</p>
+    <button class="call" onclick="openReport()">Create report</button>
+  </div>
+</section>
+
+<section class="section panel">
+  <div class="section-head"><h2>🤖 Emergency Assistant</h2><span>Quick guidance</span></div>
+  <p style="color:#65736c;line-height:1.6">Ask the prototype assistant what to do in common emergency situations.</p>
+  <button class="primary" onclick="openBot()">Open Emergency Bot</button>
+</section>
+
+</main>
+
+<footer>Emergency Response Hub • Student project prototype • Use official emergency channels for real emergencies.</footer>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+ <div class="modalbox">
+  <button class="close" onclick="closeModal()">×</button>
+  <div id="modalBody"></div>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let actions=0;
+const $=id=>document.getElementById(id);
+function scrollToId(id){$(id).scrollIntoView({behavior:'smooth'})}
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+function logAction(msg){actions++;$('activityCount').textContent=actions+' actions';$('activity').insertAdjacentHTML('afterbegin',`<div class="activity"><div class="a-dot"></div><div><p>${msg}</p><span>Just now</span></div></div>`)}
+function callService(name,num){
+ logAction('Emergency service selected: '+name);
+ toast('Opening phone dialer for '+num+'…');
+ setTimeout(()=>{ if(confirm('Prototype: call '+name+' at '+num+'?')) window.location.href='tel:'+num },250);
+}
+function triggerSOS(){
+ logAction('SOS button activated');
+ if(navigator.vibrate) navigator.vibrate([200,100,200,100,400]);
+ const ok=confirm('SOS activated. Share your location and alert your trusted contacts?');
+ if(ok){shareLocation();toast('SOS alert prepared. Connect a backend/SMS service for real alerts.')}
+}
+function locate(){
+ if(!navigator.geolocation){toast('Geolocation is not supported by this browser.');return}
+ toast('Requesting your location…');
+ navigator.geolocation.getCurrentPosition(pos=>{
+   const lat=pos.coords.latitude.toFixed(5),lon=pos.coords.longitude.toFixed(5);
+   $('locationText').textContent='Current device location';
+   $('coords').textContent=`${lat}, ${lon} • Accuracy ±${Math.round(pos.coords.accuracy)} m`;
+   logAction('Location updated');
+   toast('Location detected successfully');
+ },()=>toast('Location permission was denied or unavailable.'));
+}
+function shareLocation(){
+ const text='Emergency — please check my location. ';
+ const share={title:'Emergency Location',text:text,url:location.href};
+ if(navigator.share) navigator.share(share).then(()=>logAction('Location sharing opened')).catch(()=>{});
+ else navigator.clipboard?.writeText(location.href).then(()=>toast('Page link copied.')).catch(()=>toast('Sharing is not supported here.'));
+}
+function findHospitals(){
+ logAction('Nearby hospital search selected');
+ if(navigator.geolocation){
+  navigator.geolocation.getCurrentPosition(p=>{
+   const u=`https://www.google.com/maps/search/hospitals/@${p.coords.latitude},${p.coords.longitude},14z`;
+   window.open(u,'_blank');toast('Opening nearby hospitals');
+  },()=>window.open('https://www.google.com/maps/search/hospitals','_blank'));
+ }else window.open('https://www.google.com/maps/search/hospitals','_blank');
+}
+
+function openSheTeam(){
+ $('modalBody').innerHTML=`<h2>👩‍✈️ SHE Team Support</h2>
+ <p style="color:#65736c;line-height:1.6">Use this section for women-safety assistance. In a production app, this can connect to the appropriate official SHE Team channel for the user's city/state.</p>
+ <button class="primary" onclick="toast('SHE Team contact action selected');logAction('SHE Team support selected')">Request support</button>
+ <button class="outline" onclick="openReport()" style="margin-top:10px">Report an incident</button>`;
+ $('modal').classList.add('show');
+}
+function openReport(){
+ $('modalBody').innerHTML=`<h2>📝 Report an Issue</h2>
+ <label>Report type</label><select id="rtype" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;margin:6px 0 12px">
+ <option>Safety concern</option><option>Harassment</option><option>Suspicious activity</option><option>Road / public hazard</option><option>Other</option></select>
+ <label>Location / landmark</label><input id="rloc" placeholder="Enter location or landmark">
+ <label>Description</label><textarea id="rdesc" rows="4" placeholder="Describe what happened"></textarea>
+ <button class="primary" onclick="submitReport()">Submit report</button>`;
+ $('modal').classList.add('show');
+}
+function submitReport(){
+ const type=$('rtype').value, loc=$('rloc').value.trim(), desc=$('rdesc').value.trim();
+ if(!loc||!desc){toast('Please enter location and description');return}
+ logAction('Report submitted: '+type);
+ closeModal();
+ toast('Report saved in this prototype');
+}
+function openBot(){
+ $('modalBody').innerHTML=`<h2>🤖 Emergency Bot</h2>
+ <div id="botMessages" style="background:#f5f8f6;border-radius:12px;padding:12px;max-height:250px;overflow:auto;margin-bottom:12px">
+ <p><b>Bot:</b> Hi! Tell me what is happening. For immediate danger, use the SOS button or contact official emergency services.</p>
+ </div>
+ <div style="display:flex;gap:7px"><input id="botInput" placeholder="e.g. I need an ambulance" onkeydown="if(event.key==='Enter')sendBot()"><button class="primary" onclick="sendBot()">Send</button></div>`;
+ $('modal').classList.add('show');
+}
+function sendBot(){
+ const input=$('botInput'), msg=input.value.trim(); if(!msg)return;
+ const box=$('botMessages');
+ box.insertAdjacentHTML('beforeend',`<p><b>You:</b> ${escapeHtml(msg)}</p>`);
+ let reply='If you are in immediate danger, use SOS or call the appropriate official emergency service. You can also share your location with a trusted contact.';
+ const m=msg.toLowerCase();
+ if(m.includes('ambulance')||m.includes('medical')||m.includes('injur')) reply='For a medical emergency, contact an ambulance. In India, 108 is commonly used for ambulance services; availability can vary by location.';
+ else if(m.includes('police')||m.includes('danger')||m.includes('crime')) reply='If there is immediate danger or a crime in progress, contact police/emergency services. In India, 112 is the national emergency number.';
+ else if(m.includes('fire')) reply='For a fire or rescue emergency, move to a safe place and contact the fire service. In India, 101 is commonly used for fire emergencies.';
+ else if(m.includes('women')||m.includes('harass')||m.includes('she')) reply='For a women-safety concern, use the SHE Team/report section in this prototype and contact the appropriate official support channel.';
+ box.insertAdjacentHTML('beforeend',`<p><b>Bot:</b> ${reply}</p>`);
+ input.value='';box.scrollTop=box.scrollHeight;
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+
+function openModal(type){
+ if(type==='contact'){
+  $('modalBody').innerHTML=`<h2>Add trusted contact</h2><label>Name</label><input id="cname" placeholder="e.g. Dad"><label>Phone</label><input id="cphone" placeholder="Phone number"><button class="primary" onclick="addContact()">Save contact</button>`;
+ }else{
+  $('modalBody').innerHTML=`<h2>Prototype settings</h2><p style="color:#65736c;line-height:1.6">In a production version, this area can contain notification preferences, emergency profile information, medical notes, accessibility options and backend/API settings.</p><button class="primary" onclick="closeModal()">Done</button>`;
+ }
+ $('modal').classList.add('show');
+}
+function closeModal(){$('modal').classList.remove('show')}
+function addContact(){
+ const name=$('cname').value.trim(),phone=$('cphone').value.trim();
+ if(!name||!phone){toast('Please enter name and phone number');return}
+ const initial=name[0].toUpperCase();
+ $('contactList').insertAdjacentHTML('beforeend',`<div class="contact"><div class="person"><div class="avatar">${initial}</div><div><strong>${name}</strong><br><small style="color:#6b776f">${phone}</small></div></div><button class="mini-call" onclick="toast('Calling ${name}…')">Call</button></div>`);
+ logAction('Trusted contact added: '+name);closeModal();toast('Contact added');
+}
+</script>
+</body>
+</html>
